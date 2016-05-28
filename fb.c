@@ -205,6 +205,8 @@ int fib_heap_extract_min(struct fib_heap_t* h){
         consolidate(h);
     }
     h->n = h->n - 1;
+
+    free(ptr);
     return ret;
 }
 
@@ -243,6 +245,7 @@ static void free_node(struct node_t* x){
         free_node(ptr);
         ptr = ptr2;
     }
+    printf("Freeing: %d\n", x->key);
     free(x);
 }
 
@@ -252,12 +255,13 @@ void delete_fib_heap(struct fib_heap_t* h){
     struct node_t* tmp;
 
     if(h->min != NULL){
-        v = h->min->left;
+        v = h->min;
         w = h->min;
         do{
-            if(w != NULL)
-                free_node(w);
+            tmp = w;
             w = w->right;
+            if(tmp != NULL)
+                free_node(tmp);
         }while(w != v);
     }
 
