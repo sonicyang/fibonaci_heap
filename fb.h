@@ -21,7 +21,7 @@ struct node_t{
 struct fib_heap_t* make_fib_heap(void);
 int fib_heap_minimum(struct fib_heap_t*);
 struct fib_heap_t* fib_heap_union(struct fib_heap_t*, struct fib_heap_t*);
-void fib_heap_insert(struct fib_heap_t*, int);
+struct node_t* fib_heap_insert(struct fib_heap_t*, int);
 int fib_heap_extract_min(struct fib_heap_t*);
 void fib_heap_decrease_key(struct fib_heap_t*, struct node_t*, int);
 void fib_heap_delete(struct fib_heap_t*, struct node_t*);

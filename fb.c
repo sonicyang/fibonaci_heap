@@ -22,6 +22,7 @@ static void fib_heap_link(struct fib_heap_t* h, struct node_t* n1, struct node_t
     }
     n2->degree++;
     n1->mark = 0;
+    n1->p = n2;
 }
 
 static void consolidate(struct fib_heap_t* h){
@@ -149,7 +150,7 @@ struct fib_heap_t* fib_heap_union(struct fib_heap_t* h1, struct fib_heap_t* h2){
     return h1;
 }
 
-void fib_heap_insert(struct fib_heap_t* h, int x){
+struct node_t* fib_heap_insert(struct fib_heap_t* h, int x){
     struct node_t* n = malloc(sizeof(struct node_t));
 
     n->key = x;
@@ -174,7 +175,7 @@ void fib_heap_insert(struct fib_heap_t* h, int x){
 
     h->n++;
 
-    return;
+    return n;
 }
 
 int fib_heap_extract_min(struct fib_heap_t* h){
