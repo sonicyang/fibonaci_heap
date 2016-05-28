@@ -7,14 +7,19 @@
 #include "fb.h"
 
 static void fib_heap_link(struct fib_heap_t* h, struct node_t* n1, struct node_t* n2){
-    n1->left->right = n1->left;
+    n1->left->right = n1->right;
     n1->right->left = n1->left;
 
-    n1->right = n2->child;
-    n1->left = n2->child->left;
-    n2->child->left->right = n1;
-    n2->child->left = n1;
-
+    if(n2->child){
+        n1->right = n2->child;
+        n1->left = n2->child->left;
+        n2->child->left->right = n1;
+        n2->child->left = n1;
+    }else{
+        n2->child = n1;
+        n1->left = n1;
+        n1->right = n1;
+    }
     n2->degree++;
     n1->mark = 0;
 }
@@ -37,6 +42,7 @@ static void consolidate(struct fib_heap_t* h){
     w = h->min;
     do{
         x = w;
+        w = w->right;
         d = x->degree;
         while(A[d] != NULL){
             y = A[d];
@@ -50,7 +56,6 @@ static void consolidate(struct fib_heap_t* h){
             d++;
         }
         A[d] = x;
-        w = w->right;
     }while(w != v);
 
     h->min = NULL;
@@ -113,7 +118,10 @@ static void cascade_cut(struct fib_heap_t* h, struct node_t* y){
 }
 
 struct fib_heap_t* make_fib_heap(void){
-    return malloc(sizeof(struct fib_heap_t));
+    struct fib_heap_t* ret = malloc(sizeof(struct fib_heap_t));
+    ret->min = NULL;
+    ret->n = 0;
+    return ret;
 }
 
 int fib_heap_minimum(struct fib_heap_t* h){
@@ -188,7 +196,7 @@ int fib_heap_extract_min(struct fib_heap_t* h){
 
     ptr = h->min;
     ptr->right->left = ptr->left;
-    ptr->left->right - ptr->right;
+    ptr->left->right = ptr->right;
 
     if(ptr == ptr->right){
         h->min=NULL;
@@ -239,18 +247,19 @@ static void free_node(struct node_t* x){
 }
 
 void delete_fib_heap(struct fib_heap_t* h){
-    struct node_t* x;
     struct node_t* w;
     struct node_t* v;
     struct node_t* tmp;
 
-    v = h->min;
-    w = h->min;
-    do{
-        x = w->right;
-        free_node(w);
-        w = x;
-    }while(w != v);
+    if(h->min != NULL){
+        v = h->min->left;
+        w = h->min;
+        do{
+            if(w != NULL)
+                free_node(w);
+            w = w->right;
+        }while(w != v);
+    }
 
     free(h);
 }
