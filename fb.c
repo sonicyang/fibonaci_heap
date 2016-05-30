@@ -246,7 +246,6 @@ static void free_node(struct node_t* x){
         free_node(ptr);
         ptr = ptr2;
     }
-    printf("Freeing: %d\n", x->key);
     free(x);
 }
 

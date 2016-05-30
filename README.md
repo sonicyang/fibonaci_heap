@@ -1,51 +1,61 @@
-Dynamic Table
-=============
+Fibonacci Heap
+==============
 
-This is an implementation of dynamic table of integer type.
-The table will grow 2x up on size limit reached, and will contract 1/2x upon element only occupy 1/4 of its size.
+This is an implementation of fibonacci heap of integer type.
 
 Usage
 -----
 
-To use this library, you should include table.h.
+To use this library, you should include fb.h.
 
-#include "table.h"
+#include "fb.h"
 
-This library support 4 functions
- - create_int_table
- - delete_int_table
- - int_table_insert
- - int_table_delete
+This library support 8 functions
+ - make_fib_heap
+ - fib_heap_minimum
+ - fib_heap_union
+ - fib_heap_insert
+ - fib_heap_extract_min
+ - fib_heap_decrease_key
+ - fib_heap_delete
+ - delete_fib_heap
 
 The type of dynamic table is 
- - sturct int_table_t
+ - sturct fib_heap_t
 
-You must first declare and create a table
+The type of nodes 
+ - sturct node_t
 
-`struct int_table_t* table = create_int_table()`
+You must first declare and create a heap
+
+`struct fib_heap_t* h = make_fib_heap()`
 
 Then you can insert a integer x
 
-`int_table_insert(table, x)`
+`n = fib_heap_insert(h, x)`
 
-Or you can remove a element by index i
+Or you can decrease the key of a node 
 
-`int_table_delete(table, i)`
+`fib_heap_decrease_key(h, n, 0)`
 
-To access the data array
+Deleting a node
 
-`table->data`
+`fib_heap_delete(h, n)`
 
-if a valid data is present in the ith slot
+Extracting the minimum of the heap, this will trigger consolidate
 
-`table->used[i]` would be 1, otherwise 0.
+`min = fib_heap_extract_minimum(h)`
 
-Don't forget to free the table after use.
+Union 2 Fibonacci Heaps
 
-`delete_int_table(table)`
+`h = fib_heap_union(h1, h2)`
+
+Don't forget to free the heap after use.
+
+`delete_fib_heap(h)`
 
 Example
 -------
 A example program is included as main.c. 
 
-Please compile it with table.c.
+Please compile it with fb.c.
